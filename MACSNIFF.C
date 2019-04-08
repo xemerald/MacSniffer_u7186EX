@@ -68,7 +68,7 @@ void main( void )
 	WaitNetworkConnect();
 
 /* Start to send the control command */
-	while( 1 ) {
+	while ( 1 ) {
 	/* Show the "-S-" message on the 7-seg led */
 		Show5DigitLed(3, 5);
 		Delay(500);
@@ -117,7 +117,7 @@ void main( void )
 	closesocket(SockRecv);
 	closesocket(SockSend);
 
-	while( 1 ) {
+	while ( 1 ) {
 	/* Try to display the MAC address on the 7-seg led */
 		pos = mac;
 	/* Every 2 chars will be display on the same page */
@@ -230,7 +230,7 @@ static int SendCommand( const char *comm )
 }
 
 /* External variables for network linking status */
-extern unsigned bEthernetLinkOk;
+extern volatile unsigned bEthernetLinkOk;
 
 /*
 *  WaitNetworkConnect() - Waiting for the network connection is ready.
@@ -241,12 +241,11 @@ extern unsigned bEthernetLinkOk;
 */
 static int WaitNetworkConnect( void )
 {
-	int ret;
+	int ret = bEthernetLinkOk;
 
-	while( 1 ) {
+/* After testing, when network is real connected, this number should be 0x40(64). */
+	while ( ret != 0x40 ) {
 		ret = bEthernetLinkOk;
-	/* After testing, when network is real connected, this number should be 0x40(64). */
-		if ( ret == 0x40 ) break;
 		Delay(500);
 	}
 

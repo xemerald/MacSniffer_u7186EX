@@ -3,3 +3,6 @@
 
 # Ignore the execute files.
 *.EXE
+
+# Ignore the backup files.
+*.BAK
