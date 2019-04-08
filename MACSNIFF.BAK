@@ -1,0 +1,56 @@
+#include <u7186EX\7186e.h>
+#include <u7186EX\Tcpip32.h>
+
+#define BUFSIZE   1500
+#define PF_PACKET 17
+
+int  DebugMsg = 1;
+char InBuffer[BUFSIZE];
+
+struct sockaddr_in Sfrom;
+
+void main( void )
+{
+	int ret, type;
+	int sock_raw;
+	int fromlen;
+
+	InitLib();
+
+	type = Is7186e();
+	ret  = GetLibVersion();
+	Print("Hello uPAC-7186EX! (Flash memory is %d K)\r\n", type);
+	Print("Library version is %d.%02d\r\n", ret>>8, ret&0xff);
+
+	ret = NetStart();
+	if ( ret < 0 ) {
+		if ( DebugMsg )
+			Print("Init Ethernet error, exiting!\n\r");
+		return;
+	}
+	Print("Create Raw socket(%d) success!\n\r", sock_raw);
+	sock_raw = socket(PF_PACKET, SOCK_RAW, 0);
+	if ( sock_raw < 0 ) {
+		if ( DebugMsg )
+			Print("Create Raw socket failed, exiting!\n\r");
+		Nterm();
+		return;
+	}
+
+	fromlen = sizeof(struct sockaddr);
+
+	Print("Create Raw socket(%d) success!\n\r", sock_raw);
+	return;
+	while( 1 ) {
+		ret = recvfrom(sock_raw, InBuffer, BUFSIZE, 0, (struct sockaddr *)&Sfrom, &fromlen);
+
+		//if ( ret > 0 ) {
+
+		//}
+		//else continue;
+	}
+
+	closesocket(sock_raw);
+	Nterm();
+	return;
+}

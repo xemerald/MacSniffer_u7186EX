@@ -1,0 +1,5 @@
+# Ignore the object files.
+*.OBJ
+
+# Ignore the execute files.
+*.EXE
