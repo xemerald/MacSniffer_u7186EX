@@ -57,10 +57,10 @@ void main( void )
 /* Initialization for 7-segment led, it might be unneccary */
 	Init5DigitLed();
 
-/* Show the "-H-" message on the 7-seg led */
+/* Show the "-0-" message on the 7-seg led */
 	Show5DigitLedSeg(1, 0);
 	Show5DigitLedSeg(2, 1);
-	Show5DigitLedSeg(3, 0x37);
+	Show5DigitLed(3, 0x00);
 	Show5DigitLedSeg(4, 1);
 	Show5DigitLedSeg(5, 0);
 
@@ -116,6 +116,8 @@ void main( void )
 /* Close the sockets */
 	closesocket(SockRecv);
 	closesocket(SockSend);
+/* Terminate the network interface */
+	Nterm();
 
 	while ( 1 ) {
 	/* Try to display the MAC address on the 7-seg led */
@@ -139,8 +141,6 @@ void main( void )
 		}
 	}
 
-/* Terminate the network interface */
-	Nterm();
 	return;
 }
 
@@ -241,11 +241,15 @@ extern volatile unsigned bEthernetLinkOk;
 */
 static int WaitNetworkConnect( void )
 {
+	static int num = 0;
 	int ret = bEthernetLinkOk;
 
 /* After testing, when network is real connected, this number should be 0x40(64). */
 	while ( ret != 0x40 ) {
 		ret = bEthernetLinkOk;
+	/* Show the "-0-" to "-f-" message on the 7-seg led each loop */
+		Show5DigitLed(3, num++);
+		num %= 0x10;
 		Delay(500);
 	}
 

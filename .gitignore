@@ -6,3 +6,4 @@
 
 # Ignore the backup files.
 *.BAK
+*.DSK
