@@ -50,7 +50,7 @@ void main( void )
 	InitLib();
 
 /* Wait for the network interface ready, it might be shoter */
-	Delay(1500);
+	Delay(1200);
 /* Initialization for network interface library */
 	if ( NetworkInit( LISTEN_PORT, CONTROL_PORT ) < 0 ) return;
 
@@ -250,7 +250,7 @@ static int WaitNetworkConnect( void )
 	/* Show the "-0-" to "-f-" message on the 7-seg led each loop */
 		Show5DigitLed(3, num++);
 		num %= 0x10;
-		Delay(500);
+		Delay(800);
 	}
 
 	return ret;
